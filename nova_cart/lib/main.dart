@@ -5,11 +5,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:nova_cart/Screens/Splash%20Screen/Splash%20Screen.dart';
 import 'package:nova_cart/widgets/Appcolors.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase & Local Storage
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await GetStorage.init();
 
   runApp(const MyApp());
