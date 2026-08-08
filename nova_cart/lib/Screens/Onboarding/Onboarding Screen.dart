@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../widgets/Appcolors.dart';
+import '../../widgets/onboarding_page_item.dart';
+import '../register/view.dart';
 
 class OnboardingController extends GetxController {
   var selectedPageIndex = 0.obs;
@@ -10,7 +12,7 @@ class OnboardingController extends GetxController {
 
   void forwardAction() {
     if (isLastPage) {
-      Get.offAllNamed('/login');
+      Get.offAll(RegisterPage());
     } else {
       pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -57,8 +59,8 @@ class OnboardingScreen extends StatelessWidget {
                     controller.selectedPageIndex.value = index;
                   },
                   children: [
-                    // Page 1: Fast & Easy Shopping
-                    _buildOnboardingPage(
+                    // Page 1: Shop Smarter
+                    OnboardingPageItem(
                       isDarkMode: isDarkMode,
                       imagePath: 'Assets/images/O1.png',
                       heading: "Shop Smarter",
@@ -66,8 +68,8 @@ class OnboardingScreen extends StatelessWidget {
                       imageHeight: 220.0,
                     ),
 
-                    // Page 2: Exclusive Deals
-                    _buildOnboardingPage(
+                    // Page 2: Easy & Secure Checkout
+                    OnboardingPageItem(
                       isDarkMode: isDarkMode,
                       imagePath: 'Assets/images/O2.png',
                       heading: "Easy & Secure Checkout",
@@ -75,10 +77,9 @@ class OnboardingScreen extends StatelessWidget {
                       imageHeight: 220.0,
                     ),
 
-                    // Page 3: Start Your Journey (Theme-aware logo image)
-                    _buildOnboardingPage(
+                    // Page 3: Fast Delivery
+                    OnboardingPageItem(
                       isDarkMode: isDarkMode,
-                      // Agar light ke liye alag image hai toh yahan condition laga lein (e.g., L1.png ya light 3D logo)
                       imagePath: isDarkMode ? 'Assets/images/L2.png' : 'Assets/images/L3.png',
                       heading: "Fast Delivery",
                       description: "Track your orders in real time and receive your purchases quickly, wherever you are.",
@@ -167,54 +168,6 @@ class OnboardingScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  // Reusable Page Layout Builder
-  Widget _buildOnboardingPage({
-    required bool isDarkMode,
-    required String imagePath,
-    required String heading,
-    required String description,
-    required double imageHeight,
-  }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          imagePath,
-          height: imageHeight,
-          fit: BoxFit.contain,
-        ),
-
-        const SizedBox(height: 40.0),
-
-        Text(
-          heading,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-
-        const SizedBox(height: 12.0),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Text(
-            description,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14.0,
-              height: 1.5,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
