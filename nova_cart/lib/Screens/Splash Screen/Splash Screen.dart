@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:nova_cart/Screens/dashboard/view.dart';
 
 import '../../widgets/Appcolors.dart';
 import '../Onboarding/Onboarding Screen.dart';
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isLoggedIn = box.read('isLoggedIn') ?? false;
 
     if (isLoggedIn) {
-      Get.offAllNamed('/home');
+      Get.offAll(DashboardPage());
     } else {
       Get.offAll(OnboardingScreen());
     }
