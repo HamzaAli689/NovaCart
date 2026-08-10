@@ -63,7 +63,6 @@ class DefaultFirebaseOptions {
     projectId: 'loginapps-6cd94',
     storageBucket: 'loginapps-6cd94.appspot.com',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCn8MUuyERmwOAUA6f-R8xyOTcldaywqtY',
     appId: '1:955995175338:ios:d79b7b640fb56fd5acd3d3',
