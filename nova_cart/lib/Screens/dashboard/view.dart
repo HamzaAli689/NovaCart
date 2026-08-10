@@ -5,14 +5,14 @@ import '../../widgets/Appcolors.dart';
 import 'logic.dart';
 
 class DashboardPage extends StatelessWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  final String? userId;
+  const DashboardPage({Key? key, this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final DashboardLogic controller = Get.put(DashboardLogic());
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Alag alag screens jo index ke mutabiq switch hongi
     final List<Widget> pages = [
       _buildHomeBody(context, controller, isDarkMode), // Tab 0: Home
       _buildWishlistBody(controller, isDarkMode),     // Tab 1: Wishlist
@@ -22,7 +22,6 @@ class DashboardPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: isDarkMode ? AppColors.darkBackground : AppColors.lightBackground,
-      // IndexedStack lagane se tab switch hone par screen change hogi aur state bachi rahegi
       body: Obx(() => IndexedStack(
         index: controller.currentIndex.value,
         children: pages,
@@ -138,7 +137,7 @@ class DashboardPage extends StatelessWidget {
                       isDarkMode: isDarkMode,
                       hasBadge: true,
                       onTap: () {
-                        controller.changeTabIndex(2); // Go to Cart tab
+                        controller.changeTabIndex(2);
                       },
                     ),
                   ],
@@ -183,110 +182,7 @@ class DashboardPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(AppColors.radiusCard),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.tune_rounded, color: Colors.white, size: 20),
-                    onPressed: () {
-                      Get.bottomSheet(
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: isDarkMode ? AppColors.darkSurface : Colors.white,
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                          child: Wrap(
-                            children: [
-                              const Text("Filter Options", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                              const Divider(),
-                              ListTile(title: const Text("Price: Low to High"), onTap: () => Get.back()),
-                              ListTile(title: const Text("Price: High to Low"), onTap: () => Get.back()),
-                              ListTile(title: const Text("Top Rated"), onTap: () => Get.back()),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
               ],
-            ),
-
-            const SizedBox(height: 24.0),
-
-            // --- Promotional Banner ---
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: AppColors.primaryGradient,
-                borderRadius: BorderRadius.circular(AppColors.radiusCard),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.secondaryOrange.withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Text(
-                            "SPECIAL OFFER",
-                            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          "Super Summer Sale\nUp to 50% Off",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            height: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.snackbar("Sale", "Exploring Super Summer Sale items!");
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: AppColors.primaryNavy,
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: const Text("Shop Now", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Image.asset(
-                    'Assets/images/L3.png',
-                    height: 100,
-                    fit: BoxFit.contain,
-                  ),
-                ],
-              ),
             ),
 
             const SizedBox(height: 24.0),
@@ -301,13 +197,6 @@ class DashboardPage extends StatelessWidget {
                     color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "See All",
-                    style: TextStyle(color: AppColors.secondaryOrange, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -335,18 +224,11 @@ class DashboardPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Popular Products",
+                  "Marketplace Products",
                   style: TextStyle(
                     color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "See All",
-                    style: TextStyle(color: AppColors.secondaryOrange, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -371,7 +253,7 @@ class DashboardPage extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.72,
+                  childAspectRatio: 0.70,
                 ),
                 itemBuilder: (context, index) {
                   final product = products[index];
@@ -379,11 +261,12 @@ class DashboardPage extends StatelessWidget {
                     context: context,
                     controller: controller,
                     isDarkMode: isDarkMode,
-                    id: product['id'],
-                    imagePath: product['image'],
-                    title: product['title'],
-                    price: product['price'],
-                    rating: product['rating'],
+                    id: product['id'] ?? index.toString(),
+                    imagePath: product['image'] ?? 'Assets/images/O1.png',
+                    title: product['title'] ?? 'No Title',
+                    price: product['price'] ?? '\$0.00',
+                    rating: product['rating'] ?? '5.0',
+                    storeName: product['storeName'] ?? 'Store',
                   );
                 },
               );
@@ -435,7 +318,7 @@ class DashboardPage extends StatelessWidget {
                         border: Border.all(color: isDarkMode ? Colors.white12 : Colors.black12),
                       ),
                       child: ListTile(
-                        leading: Image.asset(item['image'], width: 40, fit: BoxFit.contain),
+                        leading: Image.asset(item['image'] ?? 'Assets/images/O1.png', width: 40, fit: BoxFit.contain),
                         title: Text(
                           item['title'],
                           style: TextStyle(
@@ -482,19 +365,244 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  // --- 4. Profile Screen Body ---
+  // --- 4. Profile & Seller Admin Panel Body ---
   Widget _buildProfileBody(DashboardLogic controller, bool isDarkMode) {
     return SafeArea(
-      child: Center(
-        child: Obx(() => Text(
-          "Profile Screen (${controller.userName.value})",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
-          ),
-        )),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: isDarkMode ? AppColors.darkSurface : AppColors.lightSurface,
+                borderRadius: BorderRadius.circular(AppColors.radiusCard),
+                border: Border.all(color: isDarkMode ? Colors.white12 : Colors.black12),
+              ),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('Assets/images/O1.png'),
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Obx(() => Text(
+                        controller.userName.value,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
+                        ),
+                      )),
+                      const SizedBox(height: 4),
+                      Obx(() => Text(
+                        controller.userRole.value == 'seller' ? "Role: Store Seller 🛍️" : "Role: Regular Buyer 🛒",
+                        style: const TextStyle(color: AppColors.secondaryOrange, fontWeight: FontWeight.w600),
+                      )),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // --- BUYER / SELLER TOGGLE SWITCH ---
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDarkMode ? AppColors.darkSurface : AppColors.lightSurface,
+                borderRadius: BorderRadius.circular(AppColors.radiusCard),
+                border: Border.all(color: isDarkMode ? Colors.white12 : Colors.black12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Switch to Seller Account", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                      SizedBox(height: 2),
+                      Text("Create your store & list products", style: TextStyle(color: Colors.grey, fontSize: 11)),
+                    ],
+                  ),
+                  Obx(() => Switch(
+                    activeColor: AppColors.secondaryOrange,
+                    value: controller.userRole.value == 'seller',
+                    onChanged: (val) => controller.toggleUserRole(val),
+                  )),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            Obx(() {
+              if (controller.userRole.value == 'seller') {
+                return _buildSellerAdminPanel(controller, isDarkMode);
+              } else {
+                return _buildBuyerSettingsView(isDarkMode);
+              }
+            }),
+          ],
+        ),
       ),
+    );
+  }
+
+// --- SELLER ADMIN PANEL FORM (Error-Free) ---
+  Widget _buildSellerAdminPanel(DashboardLogic controller, bool isDarkMode) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("Store Admin Panel", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.secondaryOrange)),
+        const SizedBox(height: 12),
+
+        TextField(
+          controller: controller.storeNameController,
+          decoration: InputDecoration(
+            labelText: "Store Name",
+            hintText: "e.g., Hamza's Electronics",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppColors.radiusCard)),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        TextField(
+          controller: controller.storeDescController,
+          decoration: InputDecoration(
+            labelText: "Store Description",
+            hintText: "What type of products do you sell?",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppColors.radiusCard)),
+          ),
+        ),
+        const SizedBox(height: 20),
+        const Divider(),
+        const SizedBox(height: 10),
+
+        const Text("Add New Product to Marketplace", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 12),
+
+        TextField(
+          controller: controller.productTitleController,
+          decoration: InputDecoration(
+            labelText: "Product Title",
+            hintText: "e.g., Wireless Gaming Mouse",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppColors.radiusCard)),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        TextField(
+          controller: controller.productPriceController,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: "Price (e.g. 45.00)",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppColors.radiusCard)),
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // --- ASSET IMAGE SELECTOR (Fixed Obx Scope) ---
+        const Text("Select Product Image:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        const SizedBox(height: 8),
+
+        SizedBox(
+          height: 70,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.availableImages.length,
+            itemBuilder: (context, index) {
+              String imgPath = controller.availableImages[index];
+
+              return Obx(() {
+                bool isSelected = controller.selectedAssetImage.value == imgPath;
+                return GestureDetector(
+                  onTap: () {
+                    controller.selectedAssetImage.value = imgPath;
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: isSelected ? AppColors.secondaryOrange : Colors.grey.withOpacity(0.4),
+                        width: isSelected ? 3 : 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Image.asset(
+                      imgPath, // <-- Yahan 'products['image']' ki jagah 'imgPath' chalega
+                      width: 60,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.broken_image, size: 40, color: Colors.grey);
+                      },
+                    ),
+                  ),
+                );
+              });
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Category Dropdown for Product (Safe implementation)
+        DropdownButtonFormField<String>(
+          value: controller.productCategoryValue.value,
+          decoration: InputDecoration(
+            labelText: "Select Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppColors.radiusCard)),
+          ),
+          items: ['Fashion', 'Electronics', 'Shoes', 'Groceries', 'Beauty']
+              .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
+              .toList(),
+          onChanged: (val) {
+            if (val != null) controller.productCategoryValue.value = val;
+          },
+        ),
+        const SizedBox(height: 20),
+
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.secondaryOrange,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppColors.radiusCard)),
+            ),
+            onPressed: () => controller.createStoreAndAddProduct(),
+            child: const Text("Publish Product to Main Dashboard", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBuyerSettingsView(bool isDarkMode) {
+    return Column(
+      children: [
+        ListTile(
+          leading: const Icon(Icons.location_on_outlined, color: AppColors.secondaryOrange),
+          title: const Text("Shipping Addresses"),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.payment_rounded, color: AppColors.secondaryOrange),
+          title: const Text("Payment Methods"),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.history_rounded, color: AppColors.secondaryOrange),
+          title: const Text("Order History"),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          onTap: () {},
+        ),
+      ],
     );
   }
 
@@ -592,6 +700,7 @@ class DashboardPage extends StatelessWidget {
     required String title,
     required String price,
     required String rating,
+    required String storeName,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -608,7 +717,24 @@ class DashboardPage extends StatelessWidget {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Image.asset(imagePath, fit: BoxFit.contain),
+                    child: Image.asset(imagePath, fit: BoxFit.contain, errorBuilder: (c, e, s) {
+                      return const Icon(Icons.shopping_bag, size: 40, color: Colors.grey);
+                    }),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryNavy.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      storeName,
+                      style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Positioned(
