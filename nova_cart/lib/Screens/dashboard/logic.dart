@@ -2,29 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DashboardLogic extends GetxController {
   var currentIndex = 0.obs;
   var userName = 'Hamza'.obs;
   // Controller mein yeh add karein:
-  var selectedAssetImage = 'Assets/images/products/O1.jpg'.obs;
-
-  final List<String> availableImages = [
-    'Assets/images/products/O1.jpg',
-    'Assets/images/products/O2.jpg',
-    'Assets/images/products/O3.jpg',
-    'Assets/images/products/O4.jpg',
-    'Assets/images/products/O5.jpg',
-    'Assets/images/products/O6.jpg',
-    'Assets/images/products/O7.jpg',
-    'Assets/images/products/O8.jpg',
-    'Assets/images/products/O9.jpg',
-  ];
 
   // --- MULTI-VENDOR ROLE STATE ---
   var userRole = 'buyer'.obs; // 'buyer' or 'seller'
-
+  final TextEditingController productImageController = TextEditingController();
   final searchController = TextEditingController();
   var searchQuery = ''.obs;
   var selectedCategory = 'Fashion'.obs;
@@ -170,7 +156,9 @@ class DashboardLogic extends GetxController {
       'category': productCategoryValue.value,
       'storeName': storeNameController.text.trim(),
       'sellerName': userName.value,
-      'image': selectedAssetImage.value, // Yahan asset path save ho raha hai
+      'image': productImageController.text.trim().isNotEmpty
+          ? productImageController.text.trim()
+          : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30', // Default fallback image
       'rating': '5.0',
       'timestamp': FieldValue.serverTimestamp(),
     });
