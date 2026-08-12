@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DashboardLogic extends GetxController {
   var currentIndex = 0.obs;
   var userName = 'Hamza'.obs;
-  // Controller mein yeh add karein:
 
   // --- MULTI-VENDOR ROLE STATE ---
   var userRole = 'buyer'.obs; // 'buyer' or 'seller'
@@ -14,7 +13,6 @@ class DashboardLogic extends GetxController {
   final searchController = TextEditingController();
   var searchQuery = ''.obs;
   var selectedCategory = 'Fashion'.obs;
-  var wishlistItems = <String>{}.obs;
 
   // --- SELLER ADMIN PANEL CONTROLLERS ---
   final storeNameController = TextEditingController();
@@ -23,7 +21,19 @@ class DashboardLogic extends GetxController {
   final productTitleController = TextEditingController();
   final productPriceController = TextEditingController();
 
-  // FIX: Yeh string value leni chahiye, .obs yahan nahi aayega
+  // Text Editing Controllers
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController(text: "hamza.ali@gmail.com");
+  final TextEditingController phoneController = TextEditingController();
+
+  // Wishlist products ki list (Proper Map list)
+  final RxList<Map<String, dynamic>> wishlistProducts = <Map<String, dynamic>>[].obs;
+
+  // Reactive Gender Dropdown Value
+  final RxString selectedGender = 'Male'.obs;
+  final List<String> genderOptions = ['Male', 'Female', 'Other'];
+
   var productCategoryValue = 'Fashion'.obs;
 
   final box = GetStorage();
@@ -62,8 +72,6 @@ class DashboardLogic extends GetxController {
     }
   }
 
-
-
   // --- SWITCH ROLE (Buyer <-> Seller) ---
   void toggleUserRole(bool isSeller) {
     userRole.value = isSeller ? 'seller' : 'buyer';
@@ -84,25 +92,33 @@ class DashboardLogic extends GetxController {
     selectedCategory.value = category;
   }
 
-  void toggleWishlist(String productId) {
-    if (wishlistItems.contains(productId)) {
-      wishlistItems.remove(productId);
+  // Product ko wishlist mein add ya remove karne ka function (Passes full Map)
+  void toggleWishlist(Map<String, dynamic> product) {
+    bool isAlreadyInWishlist = wishlistProducts.any((item) => item['title'] == product['title']);
+
+    if (isAlreadyInWishlist) {
+      wishlistProducts.removeWhere((item) => item['title'] == product['title']);
+      Get.snackbar("Removed", "Product removed from Wishlist", snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 1));
     } else {
-      wishlistItems.add(productId);
+      wishlistProducts.add(product);
+      Get.snackbar("Success", "Product added to Wishlist", snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 1));
     }
+  }
+
+  // Check karne ke liye ke product favorite hai ya nahi
+  bool isFavorite(Map<String, dynamic> product) {
+    return wishlistProducts.any((item) => item['title'] == product['title']);
   }
 
   // --- FETCH PRODUCTS FROM FIREBASE FIRESTORE ---
   void fetchMarketplaceProducts() {
-    // Realtime Firestore listener
     FirebaseFirestore.instance.collection('products').snapshots().listen((snapshot) {
       List<Map<String, dynamic>> fetchedList = snapshot.docs.map((doc) {
         var data = doc.data();
-        data['id'] = doc.id; // Assign document ID
+        data['id'] = doc.id;
         return data;
       }).toList();
 
-      // Agar Firestore khali hai ya abhi data nahi aaya toh default dummy items dikha dein ta keh UI khali na lage
       if (fetchedList.isEmpty) {
         fetchedList = [
           {
@@ -127,7 +143,6 @@ class DashboardLogic extends GetxController {
       }
       allProducts.value = fetchedList;
     }, onError: (e) {
-      // Fallback agar offline hon ya firebase error de
       allProducts.value = [
         {
           'id': '1',
@@ -143,7 +158,6 @@ class DashboardLogic extends GetxController {
   }
 
   // --- SELLER ACTION: CREATE STORE & ADD PRODUCT ---
-// Product create karte waqt isay Firestore mein bhejhein:
   void createStoreAndAddProduct() {
     if (storeNameController.text.isEmpty || productTitleController.text.isEmpty || productPriceController.text.isEmpty) {
       Get.snackbar("Error", "Please fill in all fields", backgroundColor: Colors.red, colorText: Colors.white);
@@ -158,7 +172,7 @@ class DashboardLogic extends GetxController {
       'sellerName': userName.value,
       'image': productImageController.text.trim().isNotEmpty
           ? productImageController.text.trim()
-          : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30', // Default fallback image
+          : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
       'rating': '5.0',
       'timestamp': FieldValue.serverTimestamp(),
     });
@@ -178,7 +192,22 @@ class DashboardLogic extends GetxController {
     }).toList();
   }
 
-  List<Map<String, dynamic>> get favoriteProducts {
-    return allProducts.where((product) => wishlistItems.contains(product['id'])).toList();
+  Future<void> updateProfileDetails() async {
+    try {
+      if (firstNameController.text.isNotEmpty && lastNameController.text.isNotEmpty) {
+        userName.value = "${firstNameController.text} ${lastNameController.text}";
+      }
+
+      Get.back();
+      Get.snackbar(
+        "Success",
+        "Profile updated successfully!",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar("Error", "Failed to update profile: $e", snackPosition: SnackPosition.BOTTOM);
+    }
   }
 }
