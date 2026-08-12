@@ -24,7 +24,8 @@ class WishlistBody extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: Obx(() {
-                final favs = controller.favoriteProducts;
+                // FIX: favoriteProducts ki jagah wishlistProducts use kar rahe hain
+                final favs = controller.wishlistProducts;
                 if (favs.isEmpty) {
                   return const Center(child: Text("Your wishlist is empty!", style: TextStyle(color: Colors.grey, fontSize: 16)));
                 }
@@ -40,12 +41,18 @@ class WishlistBody extends StatelessWidget {
                         border: Border.all(color: isDarkMode ? Colors.white12 : Colors.black12),
                       ),
                       child: ListTile(
-                        leading: Image.asset(item['image'] ?? 'Assets/images/O1.png', width: 40, fit: BoxFit.contain),
-                        title: Text(item['title'], style: TextStyle(color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy, fontWeight: FontWeight.bold)),
-                        subtitle: Text(item['price'], style: const TextStyle(color: AppColors.secondaryOrange, fontWeight: FontWeight.w600)),
+                        leading: Image.network(
+                          item['image'] ?? 'Assets/images/O1.png',
+                          width: 40,
+                          fit: BoxFit.contain,
+                          errorBuilder: (c, e, s) => Image.asset('Assets/images/O1.png', width: 40, fit: BoxFit.contain),
+                        ),
+                        title: Text(item['title'] ?? '', style: TextStyle(color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy, fontWeight: FontWeight.bold)),
+                        subtitle: Text(item['price'] ?? '', style: const TextStyle(color: AppColors.secondaryOrange, fontWeight: FontWeight.w600)),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent),
-                          onPressed: () => controller.toggleWishlist(item['id']),
+                          // FIX: Sirf ID ki bajaye poora 'item' map pass kar rahe hain taake toggle sahi se kaam kare
+                          onPressed: () => controller.toggleWishlist(item),
                         ),
                       ),
                     );
