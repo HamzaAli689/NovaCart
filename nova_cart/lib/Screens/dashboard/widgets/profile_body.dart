@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nova_cart/Screens/login/view.dart';
 import 'package:nova_cart/Screens/seller_admin/view.dart';
+import 'package:nova_cart/Screens/wishlist/wishlist_view.dart';
 import '../../../widgets/Appcolors.dart';
+import '../../profile_setting/profile_setting_view.dart';
 import '../logic.dart';
 
 class ProfileBody extends StatelessWidget {
@@ -57,7 +59,7 @@ class ProfileBody extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.settings_outlined, color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy),
                   onPressed: () {
-                    // Settings action
+                    Get.to(() => ProfileSettingView(controller: controller, isDarkMode: isDarkMode));
                   },
                 ),
               ],
@@ -102,7 +104,9 @@ class ProfileBody extends StatelessWidget {
                     icon: Icons.favorite_border_rounded,
                     title: "My Wishlist",
                     isDarkMode: isDarkMode,
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => WishlistView(controller: controller, isDarkMode: isDarkMode));
+                    },
                   ),
                   _buildProfileTile(
                     icon: Icons.star_border_rounded,

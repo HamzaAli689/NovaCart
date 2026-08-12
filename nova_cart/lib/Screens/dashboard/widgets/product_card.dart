@@ -29,6 +29,16 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Product ka Map tayyar kar rahe hain taake wishlist mein easily pass ho sake
+    final Map<String, dynamic> productMap = {
+      'id': id,
+      'title': title,
+      'price': price,
+      'rating': rating,
+      'image': imagePath,
+      'storeName': storeName,
+    };
+
     return Container(
       decoration: BoxDecoration(
         color: isDarkMode ? AppColors.darkSurface : AppColors.lightSurface,
@@ -52,7 +62,7 @@ class ProductCard extends StatelessWidget {
                         if (loadingProgress == null) return child;
                         return const Center(child: CircularProgressIndicator(strokeWidth: 2));
                       },
-                    )
+                    ),
                   ),
                 ),
                 Positioned(
@@ -81,9 +91,10 @@ class ProductCard extends StatelessWidget {
                   top: 8,
                   right: 8,
                   child: Obx(() {
-                    bool isFavorite = controller.wishlistItems.contains(id);
+                    // Controller ka isFavorite function use kar rahe hain
+                    bool favorite = controller.isFavorite(productMap);
                     return GestureDetector(
-                      onTap: () => controller.toggleWishlist(id),
+                      onTap: () => controller.toggleWishlist(productMap),
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
@@ -93,11 +104,11 @@ class ProductCard extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
-                          isFavorite
+                          favorite
                               ? Icons.favorite_rounded
                               : Icons.favorite_border_rounded,
                           size: 16,
-                          color: isFavorite ? Colors.redAccent : Colors.grey,
+                          color: favorite ? Colors.redAccent : Colors.grey,
                         ),
                       ),
                     );
