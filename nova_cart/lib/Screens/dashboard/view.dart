@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/cart_body.dart';
+import 'package:nova_cart/Screens/dashboard/widgets/discover_body.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/home_body.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/profile_body.dart';
-import 'package:nova_cart/Screens/dashboard/widgets/wishlist_body.dart';
 import '../../widgets/Appcolors.dart';
 import 'logic.dart';
-
 
 class DashboardPage extends StatelessWidget {
   final String? userId;
@@ -17,9 +16,10 @@ class DashboardPage extends StatelessWidget {
     final DashboardLogic controller = Get.put(DashboardLogic());
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
+    // Pages list jismein Tab 1 ab Wishlist ki jagah Discover (Search) ho gaya hai
     final List<Widget> pages = [
       HomeBody(controller: controller, isDarkMode: isDarkMode),     // Tab 0: Home
-      WishlistBody(controller: controller, isDarkMode: isDarkMode), // Tab 1: Wishlist
+      DiscoverBody(controller: controller, isDarkMode: isDarkMode), // Tab 1: Discover / Search
       CartBody(isDarkMode: isDarkMode),                             // Tab 2: Cart
       ProfileBody(controller: controller, isDarkMode: isDarkMode),  // Tab 3: Profile
     ];
