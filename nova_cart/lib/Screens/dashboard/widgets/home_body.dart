@@ -8,8 +8,9 @@ import 'product_card.dart';
 class HomeBody extends StatelessWidget {
   final DashboardLogic controller;
   final bool isDarkMode;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const HomeBody({Key? key, required this.controller, required this.isDarkMode}) : super(key: key);
+  const HomeBody({Key? key, required this.controller, required this.isDarkMode, required this.scaffoldKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +31,14 @@ class HomeBody extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.secondaryOrange, width: 2),
                       ),
-                      child: const CircleAvatar(
-                        radius: 24,
-                        backgroundImage: AssetImage('Assets/images/O1.png'),
+                      child: GestureDetector(
+                        onTap: (){
+                          scaffoldKey.currentState?.openDrawer();
+                        },
+                        child: const CircleAvatar(
+                          radius: 24,
+                          backgroundImage: AssetImage('Assets/images/O1.png'),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
