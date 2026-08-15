@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DashboardLogic extends GetxController {
   var currentIndex = 0.obs;
@@ -27,6 +28,9 @@ class DashboardLogic extends GetxController {
   final TextEditingController emailController = TextEditingController(text: "hamza.ali@gmail.com");
   final TextEditingController phoneController = TextEditingController();
 
+  var userEmail = ''.obs;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   // Wishlist products ki list (Proper Map list)
   final RxList<Map<String, dynamic>> wishlistProducts = <Map<String, dynamic>>[].obs;
 
@@ -45,6 +49,7 @@ class DashboardLogic extends GetxController {
   void onInit() {
     super.onInit();
     loadUserData();
+    fetchUserEmail();
     fetchMarketplaceProducts();
     searchController.addListener(() {
       searchQuery.value = searchController.text.trim();
@@ -69,6 +74,15 @@ class DashboardLogic extends GetxController {
     String? storedRole = box.read('userRole');
     if (storedRole != null) {
       userRole.value = storedRole;
+    }
+  }
+  // Firebase se current logged-in user ki email lene ka function
+  void fetchUserEmail() {
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null && currentUser.email != null) {
+      userEmail.value = currentUser.email!;
+    } else {
+      userEmail.value = "hamza.ali@gmail.com"; // Fallback agar user null ho
     }
   }
 
