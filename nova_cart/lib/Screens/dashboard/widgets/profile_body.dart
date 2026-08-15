@@ -10,8 +10,14 @@ import '../logic.dart';
 class ProfileBody extends StatelessWidget {
   final DashboardLogic controller;
   final bool isDarkMode;
+  // Key accept karne ke liye
 
-  const ProfileBody({Key? key, required this.controller, required this.isDarkMode}) : super(key: key);
+  const ProfileBody({
+    Key? key,
+    required this.controller,
+    required this.isDarkMode,
+
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,7 @@ class ProfileBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- 1. User Profile Header (Image, Name, Email, Settings Icon) ---
+            // --- 1. User Profile Header ---
             Row(
               children: [
                 Container(
@@ -31,9 +37,9 @@ class ProfileBody extends StatelessWidget {
                     border: Border.all(color: AppColors.secondaryOrange, width: 2),
                   ),
                   child: const CircleAvatar(
-                    radius: 32,
-                    backgroundImage: AssetImage('Assets/images/O1.png'),
-                  ),
+                      radius: 32,
+                      backgroundImage: AssetImage('Assets/images/O1.png'),
+                    ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -49,10 +55,13 @@ class ProfileBody extends StatelessWidget {
                         ),
                       )),
                       const SizedBox(height: 4),
-                      const Text(
-                        "hamza.ali@gmail.com",
-                        style: TextStyle(color: AppColors.textSecondary, fontSize: 13.0),
-                      ),
+                      Obx(() => Text(
+                        controller.userEmail.value,
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 14,
+                        ),
+                      )),
                     ],
                   ),
                 ),
@@ -66,7 +75,7 @@ class ProfileBody extends StatelessWidget {
             ),
             const SizedBox(height: 30.0),
 
-            // --- 2. UI Kit Style Options Card ---
+            // --- Baki ka sara code waisa hi rahega ---
             Container(
               decoration: BoxDecoration(
                 color: isDarkMode ? AppColors.darkSurface : Colors.white,
@@ -122,15 +131,6 @@ class ProfileBody extends StatelessWidget {
                     textColor: Colors.redAccent,
                     iconColor: Colors.redAccent,
                     onTap: () {
-
-                      // 1. Agar aap Firebase Auth use kar rahe hain to yeh line lagayein:
-                      // await FirebaseAuth.instance.signOut();
-
-                      // 2. Controller ka user role ya data clear karna ho to yahan kar sakte hain:
-                      // controller.clearUserData();
-
-                      // 3. Login screen par redirect karne ke liye GetX ka yeh method use karein:
-                      // (Apni LoginScreen ka naam yahan replace kar lein)
                       Get.offAll(() => const LoginPage());
                     },
                   ),
@@ -139,7 +139,6 @@ class ProfileBody extends StatelessWidget {
             ),
             const SizedBox(height: 24.0),
 
-            // --- 3. Switch to Seller Account Container ---
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
@@ -174,9 +173,7 @@ class ProfileBody extends StatelessWidget {
                     onChanged: (val) {
                       controller.toggleUserRole(val);
                       if (val) {
-                        // Jab switch on ho to naye admin screen/page par navigate kar jayein
-                        // Aap yahan apni target screen ka route de sakte hain:
-                         Get.to(() => Seller_adminPage(controller: controller, isDarkMode: isDarkMode));
+                        Get.to(() => Seller_adminPage(controller: controller, isDarkMode: isDarkMode));
                       }
                     },
                   )),
@@ -189,7 +186,6 @@ class ProfileBody extends StatelessWidget {
     );
   }
 
-  // Reusable tile helper for the options card
   Widget _buildProfileTile({
     required IconData icon,
     required String title,
