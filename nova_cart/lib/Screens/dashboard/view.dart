@@ -1,35 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nova_cart/Screens/dashboard/widgets/app_drawer.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/cart_body.dart';
-import 'package:nova_cart/Screens/dashboard/widgets/discover_body.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/home_body.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/profile_body.dart';
+import 'package:nova_cart/Screens/dashboard/widgets/discover_body.dart';
 import '../../widgets/Appcolors.dart';
 import 'logic.dart';
 
 class DashboardPage extends StatelessWidget {
   final String? userId;
-  const DashboardPage({Key? key, this.userId}) : super(key: key);
+  DashboardPage({Key? key, this.userId}) : super(key: key);
+
+  // Scaffold key taake kisi bhi screen (jaise ProfileBody) se drawer open kiya ja sake
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final DashboardLogic controller = Get.put(DashboardLogic());
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Pages list jismein Tab 1 ab Wishlist ki jagah Discover (Search) ho gaya hai
     final List<Widget> pages = [
-      HomeBody(controller: controller, isDarkMode: isDarkMode),     // Tab 0: Home
-      DiscoverBody(controller: controller, isDarkMode: isDarkMode), // Tab 1: Discover / Search
+      HomeBody(controller: controller, isDarkMode: isDarkMode, scaffoldKey: scaffoldKey,),     // Tab 0: Home
+      DiscoverBody(controller: controller, isDarkMode: isDarkMode), // Tab 1: Discover
       CartBody(isDarkMode: isDarkMode),                             // Tab 2: Cart
-      ProfileBody(controller: controller, isDarkMode: isDarkMode),  // Tab 3: Profile
+      ProfileBody(controller: controller, isDarkMode: isDarkMode, ), // Key pass kar di
     ];
 
     return Scaffold(
+      key: scaffoldKey, // Scaffold ko key assign kar di
       backgroundColor: isDarkMode ? AppColors.darkBackground : AppColors.lightBackground,
+
+      // --- Drawer attach kiya hai ---
+      drawer: AppDrawer(
+        controller: controller,
+        isDarkMode: isDarkMode,
+        onMenuSelected: (index) {
+          controller.changeTabIndex(index);
+        },
+      ),
+
       body: Obx(() => IndexedStack(
         index: controller.currentIndex.value,
         children: pages,
       )),
+
       bottomNavigationBar: Obx(
             () => Container(
           decoration: BoxDecoration(
@@ -53,10 +68,7 @@ class DashboardPage extends StatelessWidget {
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: "Home"),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search_rounded),
-                label: "Discover",
-              ),
+              BottomNavigationBarItem(icon: Icon(Icons.search_rounded), label: "Discover"),
               BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_outlined), label: "Cart"),
               BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: "Profile"),
             ],
