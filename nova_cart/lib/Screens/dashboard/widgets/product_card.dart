@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../widgets/Appcolors.dart';
+import '../../product_detail/view.dart';
 import '../logic.dart';
 
 class ProductCard extends StatelessWidget {
@@ -39,137 +40,147 @@ class ProductCard extends StatelessWidget {
       'storeName': storeName,
     };
 
-    return Container(
-      decoration: BoxDecoration(
-        color: isDarkMode ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(AppColors.radiusCard),
-        border: Border.all(color: isDarkMode ? Colors.white12 : Colors.black12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Image.network(
-                      imagePath,
-                      fit: BoxFit.contain,
-                      errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(child: CircularProgressIndicator(strokeWidth: 2));
-                      },
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryNavy.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      storeName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 9,
-                        fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: (){
+        Get.to(() => ProductDetailView(
+          isDarkMode: isDarkMode,
+          productName: title.toString(),
+          productPrice: price.toString(),
+          productImage: imagePath,
+        ));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDarkMode ? AppColors.darkSurface : AppColors.lightSurface,
+          borderRadius: BorderRadius.circular(AppColors.radiusCard),
+          border: Border.all(color: isDarkMode ? Colors.white12 : Colors.black12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Image.network(
+                        imagePath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+                        },
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Obx(() {
-                    // Controller ka isFavorite function use kar rahe hain
-                    bool favorite = controller.isFavorite(productMap);
-                    return GestureDetector(
-                      onTap: () => controller.toggleWishlist(productMap),
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: isDarkMode
-                              ? AppColors.darkBackground
-                              : Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          favorite
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_border_rounded,
-                          size: 16,
-                          color: favorite ? Colors.redAccent : Colors.grey,
-                        ),
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
                       ),
-                    );
-                  }),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: isDarkMode
-                        ? AppColors.textPrimaryDark
-                        : AppColors.primaryNavy,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      price,
-                      style: const TextStyle(
-                        color: AppColors.secondaryOrange,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryNavy.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        storeName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.star_rounded,
-                          color: Colors.amber,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          rating,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Obx(() {
+                      // Controller ka isFavorite function use kar rahe hain
+                      bool favorite = controller.isFavorite(productMap);
+                      return GestureDetector(
+                        onTap: () => controller.toggleWishlist(productMap),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: isDarkMode
+                                ? AppColors.darkBackground
+                                : Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            favorite
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            size: 16,
+                            color: favorite ? Colors.redAccent : Colors.grey,
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                      );
+                    }),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: isDarkMode
+                          ? AppColors.textPrimaryDark
+                          : AppColors.primaryNavy,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        price,
+                        style: const TextStyle(
+                          color: AppColors.secondaryOrange,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            color: Colors.amber,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            rating,
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
