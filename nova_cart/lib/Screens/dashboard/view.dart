@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/app_drawer.dart';
-import 'package:nova_cart/Screens/dashboard/widgets/cart_body.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/home_body.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/profile_body.dart';
 import 'package:nova_cart/Screens/dashboard/widgets/discover_body.dart';
 import '../../widgets/Appcolors.dart';
+import '../cart/view.dart';
 import 'logic.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -23,7 +23,7 @@ class DashboardPage extends StatelessWidget {
     final List<Widget> pages = [
       HomeBody(controller: controller, isDarkMode: isDarkMode, scaffoldKey: scaffoldKey,),     // Tab 0: Home
       DiscoverBody(controller: controller, isDarkMode: isDarkMode), // Tab 1: Discover
-      CartBody(isDarkMode: isDarkMode),                             // Tab 2: Cart
+      CartView(isDarkMode: isDarkMode),                             // Tab 2: Cart
       ProfileBody(controller: controller, isDarkMode: isDarkMode, ), // Key pass kar di
     ];
 
