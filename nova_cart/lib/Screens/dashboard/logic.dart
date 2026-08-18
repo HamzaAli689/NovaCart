@@ -8,12 +8,14 @@ class DashboardLogic extends GetxController {
   var currentIndex = 0.obs;
   var userName = 'Hamza'.obs;
 
+// 1. Default category 'All' set karein
+  var selectedCategory = 'All'.obs;
+
   // --- MULTI-VENDOR ROLE STATE ---
   var userRole = 'buyer'.obs; // 'buyer' or 'seller'
   final TextEditingController productImageController = TextEditingController();
   final searchController = TextEditingController();
   var searchQuery = ''.obs;
-  var selectedCategory = 'Fashion'.obs;
 
   // --- SELLER ADMIN PANEL CONTROLLERS ---
   final storeNameController = TextEditingController();
@@ -42,6 +44,7 @@ class DashboardLogic extends GetxController {
 
   final box = GetStorage();
 
+  // Marketplace Products List (Map format for seamless UI integration)
   var allProducts = <Map<String, dynamic>>[].obs;
   var myStoreProducts = <Map<String, dynamic>>[].obs;
 
@@ -63,6 +66,11 @@ class DashboardLogic extends GetxController {
     storeDescController.dispose();
     productTitleController.dispose();
     productPriceController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    productImageController.dispose();
     super.onClose();
   }
 
@@ -76,13 +84,14 @@ class DashboardLogic extends GetxController {
       userRole.value = storedRole;
     }
   }
+
   // Firebase se current logged-in user ki email lene ka function
   void fetchUserEmail() {
     User? currentUser = _auth.currentUser;
     if (currentUser != null && currentUser.email != null) {
       userEmail.value = currentUser.email!;
     } else {
-      userEmail.value = "hamza.ali@gmail.com"; // Fallback agar user null ho
+      userEmail.value = "hamza.ali@gmail.com";
     }
   }
 
@@ -102,11 +111,35 @@ class DashboardLogic extends GetxController {
     currentIndex.value = index;
   }
 
+  // Method to change category
+  void filterByCategory(String category) {
+    selectedCategory.value = category;
+  }
+
   void selectCategory(String category) {
     selectedCategory.value = category;
   }
 
-  // Product ko wishlist mein add ya remove karne ka function (Passes full Map)
+  // Getter for Featured Products (Horizontal Scroll - taking first few items)
+  List<Map<String, dynamic>> get featuredProducts {
+    return allProducts.take(4).toList();
+  }
+
+  // Getter for Filtered Products based on selected category & search query
+  List<Map<String, dynamic>> get filteredProducts {
+    return allProducts.where((product) {
+      // Agar 'All' selected hai, to saari products dikhayein
+      bool matchesCategory = (selectedCategory.value == 'All') ||
+          (product['category'] == selectedCategory.value);
+
+      bool matchesSearch = searchQuery.value.isEmpty ||
+          product['title'].toString().toLowerCase().contains(searchQuery.value.toLowerCase());
+
+      return matchesCategory && matchesSearch;
+    }).toList();
+  }
+
+  // Product ko wishlist mein add ya remove karne ka function
   void toggleWishlist(Map<String, dynamic> product) {
     bool isAlreadyInWishlist = wishlistProducts.any((item) => item['title'] == product['title']);
 
@@ -150,7 +183,7 @@ class DashboardLogic extends GetxController {
             'category': 'Shoes',
             'price': '\$85.00',
             'rating': '4.9',
-            'image': 'Assets/images/O2.png',
+            'image': 'Assets/images/O1.png',
             'storeName': 'Sneaker Hub',
           },
         ];
@@ -186,7 +219,7 @@ class DashboardLogic extends GetxController {
       'sellerName': userName.value,
       'image': productImageController.text.trim().isNotEmpty
           ? productImageController.text.trim()
-          : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
+          : 'Assets/images/O1.png',
       'rating': '5.0',
       'timestamp': FieldValue.serverTimestamp(),
     });
@@ -195,21 +228,14 @@ class DashboardLogic extends GetxController {
 
     productTitleController.clear();
     productPriceController.clear();
-  }
-
-  List<Map<String, dynamic>> get filteredProducts {
-    return allProducts.where((product) {
-      bool matchesCategory = product['category'] == selectedCategory.value;
-      bool matchesSearch = searchQuery.value.isEmpty ||
-          product['title'].toString().toLowerCase().contains(searchQuery.value.toLowerCase());
-      return matchesCategory && matchesSearch;
-    }).toList();
+    productImageController.clear();
   }
 
   Future<void> updateProfileDetails() async {
     try {
       if (firstNameController.text.isNotEmpty && lastNameController.text.isNotEmpty) {
         userName.value = "${firstNameController.text} ${lastNameController.text}";
+        box.write('userName', userName.value);
       }
 
       Get.back();
