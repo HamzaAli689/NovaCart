@@ -135,11 +135,14 @@ class HomeBody extends StatelessWidget {
               style: TextStyle(color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy, fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12.0),
+            // Categories ListView section
             SizedBox(
               height: 95,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
+                  // 'All' Category Button add kiya hai
+                  CategoryItem(title: "All", icon: Icons.apps_rounded, isDarkMode: isDarkMode, controller: controller),
                   CategoryItem(title: "Fashion", icon: Icons.checkroom_rounded, isDarkMode: isDarkMode, controller: controller),
                   CategoryItem(title: "Electronics", icon: Icons.devices_rounded, isDarkMode: isDarkMode, controller: controller),
                   CategoryItem(title: "Shoes", icon: Icons.snowboarding_rounded, isDarkMode: isDarkMode, controller: controller),
@@ -150,24 +153,110 @@ class HomeBody extends StatelessWidget {
             ),
             const SizedBox(height: 20.0),
 
+            // --- Feature Products Header ---
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Feature Products",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
+                  ),
+                ),
+                const Text(
+                  "Show all",
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+
+            // --- Horizontal ScrollView for Feature Products ---
+            SizedBox(
+              height: 240,
+              child: Obx(() => ListView.builder(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: controller.featuredProducts.length,
+                itemBuilder: (context, index) {
+                  final product = controller.featuredProducts[index];
+                  return Container(
+                    width: 150,
+                    margin: const EdgeInsets.only(right: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isDarkMode ? AppColors.darkSurface : const Color(0xFFF0EBE6),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              // Yahan dot notation ki jagah map key use ki hai
+                              child: Image.asset(product['image'] ?? 'Assets/images/O1.png', fit: BoxFit.contain, width: double.infinity),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          // Yahan bi product['title'] kar diya hai
+                          product['title'] ?? 'No Title',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          // Yahan bi product['price'] kar diya hai
+                          product['price'] ?? '\$0.00',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: AppColors.priceText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )),
+            ),
+            const SizedBox(height: 25),
+
             // Products Grid
             Text(
               "Marketplace Products",
               style: TextStyle(color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy, fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12.0),
+            // --- Marketplace Grid Section (Ensure this code is used) ---
             Obx(() {
+              // filteredProducts getter ab automatically 'All' hone par sab dikhayega
               final products = controller.filteredProducts;
+
               if (products.isEmpty) {
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 40.0),
-                  child: Center(child: Text("No products found in this category.", style: TextStyle(color: Colors.grey))),
+                  child: Center(child: Text("No products found.", style: TextStyle(color: Colors.grey))),
                 );
               }
+
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: products.length,
+                itemCount: products.length, // Yahan ab sahi count aayega
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
