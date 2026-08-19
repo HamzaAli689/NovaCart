@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../widgets/Appcolors.dart';
+import '../checkout/checkout_screen.dart';
 import 'logic.dart';
 
 class CartView extends StatelessWidget {
@@ -288,6 +289,7 @@ class CartView extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
+                        Get.to(() => CheckoutScreen());
                         Get.snackbar(
                           "Checkout",
                           "Proceeding to checkout successfully!",
