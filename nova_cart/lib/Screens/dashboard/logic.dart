@@ -250,4 +250,26 @@ class DashboardLogic extends GetxController {
       Get.snackbar("Error", "Failed to update profile: $e", snackPosition: SnackPosition.BOTTOM);
     }
   }
+
+  // --- CART & CHECKOUT CALCULATIONS ---
+
+// Cart ki items ka total subtotal nikalne ke liye
+  double get cartSubtotal {
+    return wishlistProducts.fold(0.0, (sum, item) {
+      // Price string (e.g. "$120.00") ko double mein convert karna
+      String priceStr = item['price'].toString().replaceAll('\$', '').trim();
+      double price = double.tryParse(priceStr) ?? 0.0;
+      return sum + price;
+    });
+  }
+
+// Fixed shipping fee (Aap apni marzi se change kar sakte hain)
+  double get shippingFee => 5.0;
+
+// Total amount (Subtotal + Shipping)
+  double get cartTotalAmount {
+    // Agar cart khali hai to total 0, warna subtotal + shipping
+    if (wishlistProducts.isEmpty) return 0.0;
+    return cartSubtotal + shippingFee;
+  }
 }
