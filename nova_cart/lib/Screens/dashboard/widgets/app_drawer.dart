@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/Appcolors.dart';
+import '../../setting_view/setting_view.dart';
 import '../logic.dart';
 
 
@@ -142,7 +143,7 @@ class AppDrawer extends StatelessWidget {
                 title: "Setting",
                 isSelected: false,
                 onTap: () {
-                  Get.back();
+                  Get.to(SettingView(isDarkMode: isDarkMode,));
                   // Settings route ya action yahan lagayein
                 },
                 isDarkMode: isDarkMode,
