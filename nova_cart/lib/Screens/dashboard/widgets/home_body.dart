@@ -74,7 +74,6 @@ class HomeBody extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24.0),
-
             // --- UI Kit Style Banner Card (Replacing Search) ---
             Container(
               height: 160,
@@ -128,7 +127,6 @@ class HomeBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24.0),
-
             // Categories
             Text(
               "Categories",
@@ -152,7 +150,6 @@ class HomeBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20.0),
-
             // --- Feature Products Header ---
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -176,7 +173,6 @@ class HomeBody extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 15),
-
             // --- Horizontal ScrollView for Feature Products ---
             SizedBox(
               height: 240,
@@ -234,7 +230,6 @@ class HomeBody extends StatelessWidget {
               )),
             ),
             const SizedBox(height: 25),
-
             // Products Grid
             Text(
               "Marketplace Products",
@@ -252,7 +247,6 @@ class HomeBody extends StatelessWidget {
                   child: Center(child: Text("No products found.", style: TextStyle(color: Colors.grey))),
                 );
               }
-
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
