@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nova_cart/Screens/Splash%20Screen/Splash%20Screen.dart';
 import 'package:nova_cart/widgets/Appcolors.dart';
-
 import 'firebase_options.dart';
 
 void main() async {
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
       ),
 
       // Follow system theme automatically (User can toggle later via Get.changeThemeMode)
-      themeMode: ThemeMode.system,
+      //themeMode: ThemeMode.system,
 
       home: const SplashScreen(),
     );
