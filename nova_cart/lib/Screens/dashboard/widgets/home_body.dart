@@ -76,11 +76,11 @@ class HomeBody extends StatelessWidget {
             const SizedBox(height: 24.0),
             // --- UI Kit Style Banner Card (Replacing Search) ---
             Container(
-              height: 160,
+              height: 180,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: AppColors.primaryNavy,
+                color: isDarkMode ? AppColors.darkSurface : const Color(0xFFF0EBE6),
               ),
               child: Stack(
                 children: [
@@ -90,7 +90,7 @@ class HomeBody extends StatelessWidget {
                     top: 0,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.horizontal(right: Radius.circular(16)),
-                      child: Image.asset('Assets/images/O1.png', fit: BoxFit.cover, width: 170),
+                      child: Image.asset('Assets/images/products/airbuds.png', fit: BoxFit.cover, width: 170),
                     ),
                   ),
                   Padding(
@@ -99,10 +99,10 @@ class HomeBody extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Autumn Collection\n2022",
+                        Text(
+                          "Summer Sale \n Up to 50% OFF ",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: isDarkMode ? AppColors.textPrimaryDark : AppColors.primaryNavy,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             height: 1.2,
@@ -116,7 +116,7 @@ class HomeBody extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: const Text(
-                            "Discover",
+                            "Shop Now",
                             style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -197,7 +197,7 @@ class HomeBody extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               // Yahan dot notation ki jagah map key use ki hai
-                              child: Image.asset(product['image'] ?? 'Assets/images/O1.png', fit: BoxFit.contain, width: double.infinity),
+                              child: Image.asset(product['image'] ?? 'Assets/images/products/shoes2.png', fit: BoxFit.contain, width: double.infinity),
                             ),
                           ),
                         ),
