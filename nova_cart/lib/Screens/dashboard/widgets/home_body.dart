@@ -37,7 +37,7 @@ class HomeBody extends StatelessWidget {
                         },
                         child: const CircleAvatar(
                           radius: 24,
-                          backgroundImage: AssetImage('Assets/images/O1.png'),
+                          backgroundImage: AssetImage('Assets/images/profile.png'),
                         ),
                       ),
                     ),
@@ -264,7 +264,7 @@ class HomeBody extends StatelessWidget {
                     controller: controller,
                     isDarkMode: isDarkMode,
                     id: product['id'] ?? index.toString(),
-                    imagePath: product['image'] ?? 'Assets/images/O1.png',
+                    imagePath: product['image'] ?? 'Assets/images/products/shoes1.png',
                     title: product['title'] ?? 'No Title',
                     price: product['price'] ?? '\$0.00',
                     rating: product['rating'] ?? '5.0',
