@@ -151,7 +151,6 @@ class DashboardLogic extends GetxController {
       Get.snackbar("Success", "Product added to Wishlist", snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 1));
     }
   }
-
   // Check karne ke liye ke product favorite hai ya nahi
   bool isFavorite(Map<String, dynamic> product) {
     return wishlistProducts.any((item) => item['title'] == product['title']);
@@ -334,6 +333,7 @@ class DashboardLogic extends GetxController {
       return sum + price;
     });
   }
+  
 
 // Fixed shipping fee (Aap apni marzi se change kar sakte hain)
   double get shippingFee => 5.0;
