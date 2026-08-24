@@ -333,7 +333,7 @@ class DashboardLogic extends GetxController {
       return sum + price;
     });
   }
-  
+
 
 // Fixed shipping fee (Aap apni marzi se change kar sakte hain)
   double get shippingFee => 5.0;
