@@ -35,7 +35,7 @@ class AppDrawer extends StatelessWidget {
                     radius: 26,
                     backgroundColor: AppColors.secondaryOrange.withOpacity(0.2),
                     backgroundImage: const NetworkImage(
-                      'https://images.unsplash.com/photo-1534528741775-53994a69daeb', // Placeholder profile image
+                      'Assets/images/profile.png', // Placeholder profile image
                     ),
                   ),
                   const SizedBox(width: 12),

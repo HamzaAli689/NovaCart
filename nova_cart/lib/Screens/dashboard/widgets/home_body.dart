@@ -279,7 +279,6 @@ class HomeBody extends StatelessWidget {
     );
   }
 
-  
   Widget _buildHeaderIcon({required IconData icon, required bool isDarkMode, bool hasBadge = false, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
