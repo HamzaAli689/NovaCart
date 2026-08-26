@@ -64,14 +64,26 @@ class ProductCard extends StatelessWidget {
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Image.network(
-                        imagePath,
-                        fit: BoxFit.contain,
-                        errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const Center(child: CircularProgressIndicator(strokeWidth: 2));
-                        },
+                      child: // Check karein ke image path asset hai ya network URL
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: imagePath.startsWith('Assets/') || imagePath.startsWith('assets/')
+                              ? Image.asset(
+                            imagePath,
+                            fit: BoxFit.contain,
+                            errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                          )
+                              : Image.network(
+                            imagePath,
+                            fit: BoxFit.contain,
+                            errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   ),
