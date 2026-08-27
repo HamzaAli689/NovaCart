@@ -1,6 +1,7 @@
 # 🛒 NovaCart — Modern E-Commerce Mobile Application
 
 NovaCart is a high-performance, feature-rich e-commerce mobile application built using **Flutter** and **Dart**. Designed with a modern dark navy and vibrant orange aesthetic, it delivers a seamless shopping experience with smooth state management and a clean architecture.
+
 ---
 
 ## ✨ Key Features
