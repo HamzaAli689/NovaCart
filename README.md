@@ -13,7 +13,6 @@ NovaCart is designed as a complete mobile shopping experience where users can:
 * 🔐 Create an account and securely log in
 * 🛍️ Browse products and categories
 * 🔎 Explore products through a modern marketplace interface
-* 
 * ❤️ Add and manage products in their wishlist
 * 🛒 Add products to the shopping cart
 * ➕➖ Update product quantities
